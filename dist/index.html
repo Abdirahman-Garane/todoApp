@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
+      integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE="
+      crossorigin="anonymous"
+    ></script>
+    <title>Document</title>
+    <style>
+      .donetask {
+        /* text-decoration: line-through; */
+        background-color: red;
+        /* Add any other styles you want for completed tasks */
+      }
+    </style>
+  </head>
+  <body class="text-black">
+    <div class="container flex flex-col items-center">
+      <div
+        class="head flex flex-col items-center gap-2 w-full md:w-1/2 text-black mt-5 font-MyFont"
+      >
+        <h1 class="text-xl md:text-2xl">Todo List:</h1>
+        <div class="input-btn w-full flex gap-x-1 justify-center self-center">
+          <!-- input -->
+          <input
+            id="input"
+            type="text"
+            placeholder="Type here"
+            class="input input-bordered w-full ml-2 max-w-xs"
+          />
+          <!-- button -->
+          <button
+            id="submit"
+            onclick="tags()"
+            class="py-1 mr-2 px-5 bg-blue-500 text-white rounded-md"
+          >
+            X
+          </button>
+        </div>
+      </div>
+      <div
+        id="text"
+        class="wrap flex flex-col items-center gap-2 w-full md:w-1/2 text-black mt-5 font-MyFont"
+      ></div>
+    </div>
+  </body>
+  <script>
+    let tasks = [];
+    function readTask() {
+      $("#text").empty();
+
+      $("#text").append(content);
+      for (i in tasks) {
+        // if (tasks[i].finished === true) {
+        //   $(`#title_${i}`).css("text-decoration", "line-through");
+        //   // var ti = document.getElementById(`title_${i}`);
+        //   // ti.style.textDecoration = "line-through";
+        //   // console.log(`${tasks[i].finished} ${tasks[i].title}`);
+        // }
+        var content = `
+      <div
+          class="text-area w-11/12 py-1 px-1 gap-2 md:w-3/5 flex justify-between border-b mt-8 border-gray-400"
+      >
+         ${
+           tasks[i].finished
+             ? `<div id="title_${i}" class="title text-slate-500 text-lg line-through md:text-base">${tasks[i].title}</div>
+             <div class="btnn flex gap-x-2 items-center text-white">
+            <span 
+              class="material-symbols-outlined p-1 rounded cursor-pointer bg-green-300"
+            >
+              done
+            </span>
+            <span onclick="deleteTatsk(${i})"
+              class="material-symbols-outlined p-1 rounded cursor-pointer bg-red-300 delete"
+            >
+              delete
+            </span>
+          </div>
+             `
+             : `<div id="title_${i}" class="title text-lg md:text-base">${tasks[i].title}</div>
+             <div class="btnn flex gap-x-2 items-center text-white">
+            <span onclick="lineThrough(${i})"
+              class="material-symbols-outlined p-1 rounded cursor-pointer bg-green-600"
+            >
+              done
+            </span>
+            <span onclick="deleteTatsk(${i})"
+              class="material-symbols-outlined p-1 rounded cursor-pointer bg-red-600 delete"
+            >
+              delete
+            </span>
+          </div>
+             `
+         }
+       
+      </div>
+    `;
+
+        $("#text").append(content);
+      }
+    }
+    function readingItem() {
+      tasks = JSON.parse(localStorage.getItem("tasks")) ?? [];
+    }
+
+    readTask();
+    $("#submit").click(function () {
+      var titleInput = $("#input").val();
+      tasks.push({
+        title: titleInput,
+        finished: false,
+      });
+      storingItem();
+      readTask();
+    });
+    $("#isDone").click(function () {
+      tasks.pop();
+    });
+    function lineThrough(index) {
+      tasks[index].finished = true;
+      storingItem();
+      readTask();
+    }
+    function deleteTatsk(index) {
+      alert("is deleted");
+      tasks.splice(index, 1);
+      storingItem;
+      readTask();
+    }
+
+    function storingItem() {
+      var tasksStr = JSON.stringify(tasks);
+      localStorage.setItem("tasks", tasksStr);
+    }
+  </script>
+</html>
